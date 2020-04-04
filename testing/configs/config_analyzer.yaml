@@ -8,4 +8,6 @@ file_groups:
     run_number: 1
 
 analysis:
-  - scatterplot
+  - scatter : {c: 'black', alpha: 0.5}
+
+

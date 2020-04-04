@@ -169,14 +169,13 @@ class PerftestNotebook(object):
         output_data_filepath = self.parse_output()
 
         print("Writing results to %s" % output_data_filepath)
-
         with open(output_data_filepath, "w") as f:
             json.dump(self.fmt_data, f, indent=4, sort_keys=True)
-
         # Gather config["analysis"] corresponding notebook sections
         if "analysis" in self.config:
             for func in self.config["analysis"]:
-                notebook_sections += self.analyzer.get_notebook_section(func)
+                (function_name,function_parameter) = list(func.items())[0]
+                notebook_sections += self.analyzer.get_notebook_section(function_name,function_parameter)
 
         # Post to Iodide server
         if not no_iodide:

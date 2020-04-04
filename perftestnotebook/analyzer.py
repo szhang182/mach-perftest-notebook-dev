@@ -41,8 +41,23 @@ class NotebookAnalyzer(object):
             template_header_content = f.read()
             return template_header_content
 
-    def get_notebook_section(self, func):
+    def get_notebook_section(self, function_name,function_parameter=None):
+        notebook_section = ""
         template_function_folder_path = "testing/resources/notebook-sections/"
-        template_function_file_path = os.path.join(template_function_folder_path, func)
+        template_function_file_path = os.path.join(template_function_folder_path, function_name)
         with open(template_function_file_path, "r") as f:
-            return f.read()
+            line = f.readline()
+            while line:
+                if function_name in line and function_parameter is not None:
+                    parameter_string = ""
+                    for (x,y) in list(function_parameter.items()):
+                        parameter_string += ",{}={}".format(x,y)
+                    close_parethesis_index = line.index(")")
+                    modified_line = (line[:close_parethesis_index] + 
+                                    parameter_string +
+                                    line[close_parethesis_index:])
+                    notebook_section += modified_line
+                else:
+                    notebook_section += line
+                line = f.readline()
+        return notebook_section
